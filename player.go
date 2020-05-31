@@ -8,9 +8,9 @@ type player struct {
 }
 
 func CheckPlayer(userID string) {
-	tmp, ok := users[userID]
+	_, ok := users[userID]
 	if !ok {
-		users[userID] := player{0, 50, 10, 1}
+		users[userID] = player{0, 50, 10, 1}
 	}
 	return
 }
