@@ -6,6 +6,7 @@ import (
 
 type item struct {
 	Name string
+	Price int
 	Hp int
 	Atk int
 	Def int
@@ -19,4 +20,6 @@ func Equip(user *discordgo.User, itemID int) {
 	users[user.ID].Def += items[itemID].Def
 	users[user.ID].Evasion += items[itemID].Evasion
 	users[user.ID].CritChance += items[itemID].CritChance
+
+	users[user.ID].Equipment = append(users[user.ID].Equipment, items[itemID])
 }
