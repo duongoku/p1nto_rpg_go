@@ -12,15 +12,30 @@ var (
 	mess = make(chan *discordgo.MessageCreate, 1)
 	prefix = "p."
 	terminate = make(chan bool, 1)
-	users = make(map[string]player)
+	users = make(map[string]*player)
+	items = make(map[int]*item)
 )
+
+func Min(x, y int) int {
+	if x < y {
+	return x
+	}
+	return y
+}
+
+func Max(x, y int) int {
+	if x > y {
+	return x
+	}
+	return y
+}
 
 func RNG(x int) bool {
 	//x% is the miss chance
 	if rand.Intn(100) < x {
-		return false
-	} else {
 		return true
+	} else {
+		return false
 	}
 }
 
@@ -52,6 +67,9 @@ func MessageHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 		case strings.HasPrefix(content, "help"):
 			HelpHandle(s, m)
 			break
+		case strings.HasPrefix(content, "stats"):
+			StatsHandle(s, m)
+			break
 		default:
 			break
 	}
@@ -59,6 +77,10 @@ func MessageHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func Loop(s *discordgo.Session, stopListening func()) {
+	//Name, Hp, Atk, Def, Evasion, CritChane
+	items[0] = &item{"Wooden Stick", 0, 10, 0, 0, 10}
+	items[1] = &item{"Wooden Plate Mail", 50, 0, 2, 0, 0}
+	items[2] = &item{"Wooden Greaves", 10, 0, 1, 10, 0}
 	for {
 		select {
 			case m := <-mess:
