@@ -91,6 +91,7 @@ func Loop(s *discordgo.Session, stopListening func()) {
 			case m := <-mess:
 				MessageHandle(s, m)
 			case <-terminate:
+				stopListening()
 				fmt.Println("Terminated!")
 				return
 		}
