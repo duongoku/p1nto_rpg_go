@@ -43,8 +43,10 @@ func Hit(s *discordgo.Session, m **discordgo.Message, chanID *string, u1 *discor
 	if *hp2 <= 0 {
 		*m, _ = s.ChannelMessage(*chanID, (*m).ID)
 		tmps = (*m).Content + "\n"
-		tmps = tmps + u2.Username + "'s HP reached 0, " + u2.Username + " is dead."
+		tmps = tmps + u2.Username + "'s HP reached 0, " + u2.Username + " is dead.\n"
+		tmps = tmps + u1.Username + " Won! $10 has been added to " + u1.Username + "'s balance"
 		s.ChannelMessageEdit(*chanID, (*m).ID, tmps)
+		users[u1.ID].Money += 10
 		return true
 	}
 	return false
@@ -67,6 +69,10 @@ func CombatHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 	if len(m.Mentions)>1 {
 		s.ChannelMessageSend(m.ChannelID, "You mentioned more than one person")
+		return
+	}
+	if m.Mentions[0].ID == m.Author.ID {
+		s.ChannelMessageSend(m.ChannelID, "You can't kick your own butt bro")
 		return
 	}
 

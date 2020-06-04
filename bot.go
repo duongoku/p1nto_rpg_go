@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"math/rand"
+	"os"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -13,7 +14,7 @@ var (
 	prefix = "p."
 	terminate = make(chan bool, 1)
 	users = make(map[string]*player)
-	items = make(map[int]*item)
+	items = make(map[int]item)
 )
 
 func Min(x, y int) int {
@@ -59,8 +60,10 @@ func MessageHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	switch(tmp){
 		case strings.HasPrefix(content, "die"):
-			terminate<- true
-			break
+			if m.Author.ID == os.Getenv("OWNERID") {
+				terminate<- true
+				break
+			}
 		case strings.HasPrefix(content, "combat"):
 			CombatHandle(s, m)
 			break
@@ -70,6 +73,9 @@ func MessageHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 		case strings.HasPrefix(content, "stats"):
 			StatsHandle(s, m)
 			break
+		case strings.HasPrefix(content, "equipment"):
+			EquipmentHandle(s, m)
+			break
 		default:
 			break
 	}
@@ -77,10 +83,9 @@ func MessageHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func Loop(s *discordgo.Session, stopListening func()) {
-	//Name, Hp, Atk, Def, Evasion, CritChane
-	items[0] = &item{"Wooden Stick", 0, 10, 0, 0, 10}
-	items[1] = &item{"Wooden Plate Mail", 50, 0, 2, 0, 0}
-	items[2] = &item{"Wooden Greaves", 10, 0, 1, 10, 0}
+	InitItem()
+	LoadData()
+	defer SaveData()
 	for {
 		select {
 			case m := <-mess:

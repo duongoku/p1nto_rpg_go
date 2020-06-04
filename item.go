@@ -14,6 +14,14 @@ type item struct {
 	CritChance int
 }
 
+func InitItem() {
+	//Name, Price, Hp, Atk, Def, Evasion, CritChane
+	items[0] = item{"Wooden Amulet", 50, 5, 5, 1, 5, 5}
+    items[1] = item{"Wooden Stick", 25, 0, 10, 0, 0, 20}
+    items[2] = item{"Wooden Plate Mail", 25, 25, 0, 2, 0, 0}
+    items[3] = item{"Wooden Greaves", 25, 5, 0, 1, 20, 0}
+}
+
 func Equip(user *discordgo.User, itemID int) {
 	users[user.ID].Hp += items[itemID].Hp
 	users[user.ID].Atk += items[itemID].Atk
