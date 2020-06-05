@@ -17,6 +17,6 @@ func ShopHandle(s *discordgo.Session, m *discordgo.MessageCreate){
 		temp += strconv.Itoa(value.CritChance) + "\n"
 	}
 	temp += "```"
-	m.Content = temp
-	s.ChannelMessageSend(m.ChannelID, m.Content)
+	
+	s.ChannelMessageSend(m.ChannelID, temp)
 }
