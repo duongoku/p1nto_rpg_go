@@ -14,7 +14,6 @@ func HelpHandle(s *discordgo.Session, m *discordgo.MessageCreate){
 	temp += "- 'equipment' to display your equipment\n"
 	temp += "- 'shop' to go to shop and see shelves\n"
 	temp += "- 'help' to display this shit```\n"
-
-	m.Content = temp
-	s.ChannelMessageSend(m.ChannelID, m.Content)
+	
+	s.ChannelMessageSend(m.ChannelID, temp)
 }
