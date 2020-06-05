@@ -56,39 +56,38 @@ func MessageHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	content = content[len(prefix):]
-	tmp := true
 
-	switch(tmp){
-		case strings.Split(content, " ")[0] == "die":
+	switch(strings.Split(content, " ")[0]){
+		case "die":
 			if m.Author.ID == os.Getenv("OWNERID") {
 				terminate<- true
 				break
 			}
-		case strings.Split(content, " ")[0] == "combat":
+		case "combat":
 			CombatHandle(s, m)
 			break
-		case strings.Split(content, " ")[0] == "help":
+		case "help":
 			HelpHandle(s, m)
 			break
-		case strings.Split(content, " ")[0] == "stats":
+		case "stats":
 			StatsHandle(s, m)
 			break
-		case strings.Split(content, " ")[0] == "equipment":
+		case "equipment":
 			EquipmentHandle(s, m)
 			break
-		case strings.Split(content, " ")[0] == "equip":
+		case "equip":
 			EquipHandle(s, m)
 			break
-		case strings.Split(content, " ")[0] == "unequip":
+		case "unequip":
 			UnequipHandle(s, m)
 			break
-		case strings.Split(content, " ")[0] == "shop":
+		case "shop":
 			ShopHandle(s, m)
 			break
-		case strings.Split(content, " ")[0] == "buy":
+		case "buy":
 			BuyHandle(s, m)
 			break
-		case strings.Split(content, " ")[0] == "sell":
+		case "sell":
 			SellHandle(s, m)
 			break
 		default:
