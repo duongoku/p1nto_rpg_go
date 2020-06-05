@@ -65,7 +65,8 @@ func EquipmentHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	p := users[u.ID]
 
 	tmps := (p.Name + "'s Equipment:")
-	for _, eqm := range p.Equipment {
+	for _, eqmid := range p.Equipment {
+		eqm := items[eqmid]
 		tmps = tmps + "\n" + eqm.Name + ": "
 		if eqm.Hp > 0 {
 			tmps = tmps + "Hp+" + strconv.Itoa(eqm.Hp) + ", "

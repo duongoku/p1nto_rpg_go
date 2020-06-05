@@ -8,8 +8,8 @@ import (
 type player struct {
 	Name string
 	Money int
-	Equipment []item
-	Inventory []item
+	Equipment []int
+	Inventory []int
 	Hp int
 	Atk int
 	Def int

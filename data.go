@@ -57,6 +57,4 @@ func LoadData() {
 		v := tmp[i]
 		users[i] = &v
 	}
-
-	fmt.Printf("%v\n", tmp)
 }

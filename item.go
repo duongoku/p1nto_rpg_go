@@ -29,5 +29,5 @@ func Equip(user *discordgo.User, itemID int) {
 	users[user.ID].Evasion += items[itemID].Evasion
 	users[user.ID].CritChance += items[itemID].CritChance
 
-	users[user.ID].Equipment = append(users[user.ID].Equipment, items[itemID])
+	users[user.ID].Equipment = append(users[user.ID].Equipment, itemID)
 }
