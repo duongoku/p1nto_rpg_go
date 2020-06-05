@@ -46,6 +46,10 @@ func EquipHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "You don't have that many items bro")
 		return
 	}
+	if(InvenID < 0) {
+		s.ChannelMessageSend(m.ChannelID, "Bro?")
+		return
+	}
 
 	temp := users[m.Author.ID].Inventory[InvenID]
 	if Equip(m.Author, users[m.Author.ID].Inventory[InvenID]) {
