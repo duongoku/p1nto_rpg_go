@@ -75,6 +75,9 @@ func MessageHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 		case "equipment":
 			EquipmentHandle(s, m)
 			break
+		case "inventory":
+			InventoryHandle(s, m)
+			break
 		case "equip":
 			EquipHandle(s, m)
 			break
