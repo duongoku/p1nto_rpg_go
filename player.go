@@ -8,7 +8,7 @@ import (
 type player struct {
 	Name string
 	Money int
-	Equipment []int
+	Equipment [5]int
 	Inventory []int
 	Hp int
 	Atk int
@@ -20,7 +20,7 @@ type player struct {
 func CheckPlayer(user *discordgo.User) {
 	_, ok := users[user.ID]
 	if !ok {
-		users[user.ID] = &player{user.Username, 0, nil, nil, 50, 10, 1, 1, 1}
+		users[user.ID] = &player{user.Username, 0, [5]int{-1, -1, -1, -1, -1}, nil, 50, 10, 1, 1, 1}
 		Equip(user, 1)
 		Equip(user, 2)
 		Equip(user, 3)
