@@ -14,7 +14,7 @@ var (
 	prefix = "p."
 	terminate = make(chan bool, 1)
 	users = make(map[string]*player)
-	items = make(map[int]item)
+	items = make(map[int]*item)
 )
 
 func Min(x, y int) int {
@@ -59,22 +59,37 @@ func MessageHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	tmp := true
 
 	switch(tmp){
-		case strings.HasPrefix(content, "die"):
+		case strings.Split(content, " ")[0] == "die":
 			if m.Author.ID == os.Getenv("OWNERID") {
 				terminate<- true
 				break
 			}
-		case strings.HasPrefix(content, "combat"):
+		case strings.Split(content, " ")[0] == "combat":
 			CombatHandle(s, m)
 			break
-		case strings.HasPrefix(content, "help"):
+		case strings.Split(content, " ")[0] == "help":
 			HelpHandle(s, m)
 			break
-		case strings.HasPrefix(content, "stats"):
+		case strings.Split(content, " ")[0] == "stats":
 			StatsHandle(s, m)
 			break
-		case strings.HasPrefix(content, "equipment"):
+		case strings.Split(content, " ")[0] == "equipment":
 			EquipmentHandle(s, m)
+			break
+		case strings.Split(content, " ")[0] == "equip":
+			EquipHandle(s, m)
+			break
+		case strings.Split(content, " ")[0] == "unequip":
+			UnequipHandle(s, m)
+			break
+		case strings.Split(content, " ")[0] == "shop":
+			ShopHandle(s, m)
+			break
+		case strings.Split(content, " ")[0] == "buy":
+			BuyHandle(s, m)
+			break
+		case strings.Split(content, " ")[0] == "sell":
+			SellHandle(s, m)
 			break
 		default:
 			break
