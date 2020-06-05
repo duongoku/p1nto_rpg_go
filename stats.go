@@ -27,7 +27,7 @@ func StatsHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	/*Name string
 	Money int
-	Equipment []int
+	Equipment [5]int
 	Inventory []int
 	Hp int
 	Atk int
@@ -65,9 +65,14 @@ func EquipmentHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	p := users[u.ID]
 
 	tmps := (p.Name + "'s Equipment:")
-	for _, eqmid := range p.Equipment {
+	for id, eqmid := range p.Equipment {
+		tmps = tmps + "\n" + "Slot " + strconv.Itoa(id) + ": "
+		if eqmid==-1 {
+			tmps = tmps + "nothing"
+			continue
+		}
 		eqm := items[eqmid]
-		tmps = tmps + "\n" + eqm.Name + ": "
+		tmps = tmps + eqm.Name + ": "
 		if eqm.Hp > 0 {
 			tmps = tmps + "Hp+" + strconv.Itoa(eqm.Hp) + ", "
 		}
