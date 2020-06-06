@@ -25,6 +25,7 @@ func main() {
 	}
 
 	err = dg.Open()
+	dg.UpdateStatus(0, "p.help")
 	defer dg.Close()
 	
 	if err != nil {
