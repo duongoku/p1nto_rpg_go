@@ -36,12 +36,22 @@ func ShopHandle(s *discordgo.Session, m *discordgo.MessageCreate){
 
 func BuyHandle(s *discordgo.Session, m *discordgo.MessageCreate){
 	subcontent := strings.Split(m.Content, " ")
-	if len(subcontent) < 1 {
-		s.ChannelMessageSend(m.ChannelID, "You must mention an itemID in the shop !")
+	if len(subcontent) < 2 {
+		s.ChannelMessageSend(m.ChannelID, "You must provide an itemID in the shop!")
 		return
 	}
 
-	itemID, _ := strconv.Atoi(subcontent[len(subcontent) - 1])
+	itemID, err := strconv.Atoi(subcontent[1])
+	if err != nil {
+		s.ChannelMessageSend(m.ChannelID, "Wrong Format")
+  		fmt.Println(err)
+  		return
+	}
+
+	if len(subcontent) > 2 {
+        s.ChannelMessageSend(m.ChannelID, "Too many arguments")
+        return
+    }
 
 	u := m.Author
 	CheckPlayer(u)
@@ -59,8 +69,22 @@ func BuyHandle(s *discordgo.Session, m *discordgo.MessageCreate){
 
 func SellHandle(s *discordgo.Session, m *discordgo.MessageCreate){
 	subcontent := strings.Split(m.Content, " ")
-	invID, _ := strconv.Atoi(subcontent[len(subcontent) - 1])
-	fmt.Println(invID)
+	if len(subcontent) < 2 {
+		s.ChannelMessageSend(m.ChannelID, "You must provide an itemID in the shop!")
+		return
+	}
+
+	invID, err := strconv.Atoi(subcontent[1])
+	if err != nil {
+		s.ChannelMessageSend(m.ChannelID, "Wrong Format")
+  		fmt.Println(err)
+  		return
+	}
+
+	if len(subcontent) > 2 {
+        s.ChannelMessageSend(m.ChannelID, "Too many arguments")
+        return
+    }
 
 	u := m.Author
 	CheckPlayer(u)
