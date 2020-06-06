@@ -119,7 +119,7 @@ func InventoryHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	for invID, eqm := range p.Inventory {
 		tmps = tmps + "\n" + "Inventory ID: " + strconv.Itoa(invID) + "\n"
-		tmps += "Type:" + strconv.Itoa(items[eqm].SlotID) + " " + items[eqm].Name + ": "
+		tmps += "Slot ID:" + strconv.Itoa(items[eqm].SlotID) + " " + items[eqm].Name + ": "
 		if items[eqm].Hp > 0 {
 			tmps = tmps + "Hp+" + strconv.Itoa(items[eqm].Hp) + ", "
 		}
