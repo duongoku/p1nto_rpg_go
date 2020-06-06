@@ -45,7 +45,7 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func MessageHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if m.Author.ID == s.State.User.ID {
+	if m.Author.Bot {
 		return
 	}
 
@@ -57,7 +57,7 @@ func MessageHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	content = content[len(prefix):]
 
-	switch(strings.Split(content, " ")[0]){
+	switch(strings.Split(content, " ")[0]) {
 		case "die":
 			if m.Author.ID == os.Getenv("OWNERID") {
 				terminate<- true
