@@ -94,7 +94,7 @@ func EquipmentHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	s.ChannelMessageSend(m.ChannelID, tmps)
 }
 
-func InventoryHandle(s *discordgo.Session, m *discordgo.MessageCreate){
+func InventoryHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	content := strings.Split(m.Content, " ")
 	if len(content)>2 {
 		s.ChannelMessageSend(m.ChannelID, "Too many arguments")

@@ -7,11 +7,11 @@ import (
 	"strings"
 )
 
-func ShopHandle(s *discordgo.Session, m *discordgo.MessageCreate){
+func ShopHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	temp := "```Welcome to the shop\n"
 	for itID, eqm := range items {
-		temp = temp + "\n" + "Shop ID:" + strconv.Itoa(itID) + " Price: " + strconv.Itoa(eqm.Price) + "$\n"
-		temp += eqm.Name + "-Type:" + strconv.Itoa(eqm.SlotID) + "-"
+		temp = temp + "\n" + "Item ID:" + strconv.Itoa(itID) + " Price: " + strconv.Itoa(eqm.Price) + "$\n"
+		temp += eqm.Name + "-Equip Slot:" + strconv.Itoa(eqm.SlotID) + "-"
 		if eqm.Hp > 0 {
 			temp = temp + "Hp+" + strconv.Itoa(eqm.Hp) + ", "
 		}
@@ -34,21 +34,21 @@ func ShopHandle(s *discordgo.Session, m *discordgo.MessageCreate){
 	s.ChannelMessageSend(m.ChannelID, temp)
 }
 
-func BuyHandle(s *discordgo.Session, m *discordgo.MessageCreate){
-	subcontent := strings.Split(m.Content, " ")
-	if len(subcontent) < 2 {
+func BuyHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
+	content := strings.Split(m.Content, " ")
+	if len(content) < 2 {
 		s.ChannelMessageSend(m.ChannelID, "You must provide an itemID in the shop!")
 		return
 	}
 
-	itemID, err := strconv.Atoi(subcontent[1])
+	itemID, err := strconv.Atoi(content[1])
 	if err != nil {
 		s.ChannelMessageSend(m.ChannelID, "Wrong Format")
   		fmt.Println(err)
   		return
 	}
 
-	if len(subcontent) > 2 {
+	if len(content) > 2 {
         s.ChannelMessageSend(m.ChannelID, "Too many arguments")
         return
     }
@@ -67,21 +67,21 @@ func BuyHandle(s *discordgo.Session, m *discordgo.MessageCreate){
 	}
 }
 
-func SellHandle(s *discordgo.Session, m *discordgo.MessageCreate){
-	subcontent := strings.Split(m.Content, " ")
-	if len(subcontent) < 2 {
-		s.ChannelMessageSend(m.ChannelID, "You must provide an itemID in the shop!")
+func SellHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
+	content := strings.Split(m.Content, " ")
+	if len(content) < 2 {
+		s.ChannelMessageSend(m.ChannelID, "You must provide an Inventory ID in the shop!")
 		return
 	}
 
-	invID, err := strconv.Atoi(subcontent[1])
+	invID, err := strconv.Atoi(content[1])
 	if err != nil {
 		s.ChannelMessageSend(m.ChannelID, "Wrong Format")
   		fmt.Println(err)
   		return
 	}
 
-	if len(subcontent) > 2 {
+	if len(content) > 2 {
         s.ChannelMessageSend(m.ChannelID, "Too many arguments")
         return
     }
