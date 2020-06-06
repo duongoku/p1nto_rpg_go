@@ -24,17 +24,26 @@ func InventoryHandle(s *discordgo.Session, m *discordgo.MessageCreate){
 	CheckPlayer(u)
 	p := users[u.ID]
 
-	tmps := (p.Name + "'s Inventory:\n")
-	tmps += "```Value type in order: Hp, Price, Atk, Def, Evasion, CritChance\n"
-	for i, inv := range p.Inventory {
-		tmps += "Slot " + strconv.Itoa(i) + ": "
-		tmps += inv.Name + ": " + "\n"
-		tmps += strconv.Itoa(inv.Price) + " "
-		tmps += strconv.Itoa(inv.Hp) + " "
-		tmps += strconv.Itoa(inv.Atk) + " "
-		tmps += strconv.Itoa(inv.Def) + " "
-		tmps += strconv.Itoa(inv.Evasion) + " "
-		tmps += strconv.Itoa(inv.CritChance) + "\n"
+	tmps := "```" + p.Name + "'s Inventory:\n"
+	for invID, eqm := range p.Inventory {
+		tmps = tmps + "\n" + "Inventory ID: " + strconv.Itoa(invID) + "\n"
+		tmps += "Type:" + strconv.Itoa(items[eqm].SlotID) + " " + items[eqm].Name + ": "
+		if items[eqm].Hp > 0 {
+			tmps = tmps + "Hp+" + strconv.Itoa(items[eqm].Hp) + ", "
+		}
+		if items[eqm].Atk > 0 {
+			tmps = tmps + "Attack+" + strconv.Itoa(items[eqm].Atk) + ", "
+		}
+		if items[eqm].Def > 0 {
+			tmps = tmps + "Defense+" + strconv.Itoa(items[eqm].Def) + ", "
+		}
+		if items[eqm].Evasion > 0 {
+			tmps = tmps + "Evasion+" + strconv.Itoa(items[eqm].Evasion) + "%, "
+		}
+		if items[eqm].CritChance > 0 {
+			tmps = tmps + "Critical Chance+" + strconv.Itoa(items[eqm].CritChance) + "%, "
+		}
+		tmps = tmps[0:len(tmps)-2]
 	}
 	tmps += "```"
 	s.ChannelMessageSend(m.ChannelID, tmps)
