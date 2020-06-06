@@ -70,7 +70,7 @@ func BuyHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 func SellHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	content := strings.Split(m.Content, " ")
 	if len(content) < 2 {
-		s.ChannelMessageSend(m.ChannelID, "You must provide an Inventory ID in the shop!")
+		s.ChannelMessageSend(m.ChannelID, "You must provide an ID in Inventory in the shop!")
 		return
 	}
 
