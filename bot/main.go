@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	var token string = os.Getenv("TOKEN_test")
+	var token string = os.Getenv("TOKEN")
 	rand.Seed(time.Now().UnixNano())
 	if token == "" {
 		fmt.Println("No TOKEN found!")
