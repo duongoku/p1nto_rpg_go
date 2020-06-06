@@ -93,3 +93,7 @@ func EquipmentHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	s.ChannelMessageSend(m.ChannelID, tmps)
 }
+
+func InventoryHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
+
+}

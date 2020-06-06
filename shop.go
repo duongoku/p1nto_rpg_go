@@ -20,3 +20,11 @@ func ShopHandle(s *discordgo.Session, m *discordgo.MessageCreate){
 	
 	s.ChannelMessageSend(m.ChannelID, temp)
 }
+
+func BuyHandle(s *discordgo.Session, m *discordgo.MessageCreate){
+
+}
+
+func SellHandle(s *discordgo.Session, m *discordgo.MessageCreate){
+	
+}
