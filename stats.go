@@ -113,6 +113,10 @@ func InventoryHandle(s *discordgo.Session, m *discordgo.MessageCreate){
 	p := users[u.ID]
 
 	tmps := "```" + p.Name + "'s Inventory:\n"
+	if len(p.Inventory) == 0 {
+		tmps += "Empty!"
+	}
+
 	for invID, eqm := range p.Inventory {
 		tmps = tmps + "\n" + "Inventory ID: " + strconv.Itoa(invID) + "\n"
 		tmps += "Type:" + strconv.Itoa(items[eqm].SlotID) + " " + items[eqm].Name + ": "
