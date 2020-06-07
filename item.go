@@ -42,7 +42,7 @@ func EquipHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "Wrong format")
 		return
 	}
-	if(InvenID >= len(users[m.Author.ID].Inventory)) {
+	if(InvenID >= len(players[m.Author.ID].Inventory)) {
 		s.ChannelMessageSend(m.ChannelID, "You don't have that many items bro")
 		return
 	}
@@ -51,9 +51,9 @@ func EquipHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	temp := users[m.Author.ID].Inventory[InvenID]
-	if Equip(m.Author, users[m.Author.ID].Inventory[InvenID]) {
-		users[m.Author.ID].Inventory = append(users[m.Author.ID].Inventory[:InvenID], users[m.Author.ID].Inventory[InvenID+1:]...)
+	temp := players[m.Author.ID].Inventory[InvenID]
+	if Equip(m.Author, players[m.Author.ID].Inventory[InvenID]) {
+		players[m.Author.ID].Inventory = append(players[m.Author.ID].Inventory[:InvenID], players[m.Author.ID].Inventory[InvenID+1:]...)
 
 		s.ChannelMessageSend(m.ChannelID, "Equipped " + items[temp].Name)
 	} else {
@@ -77,14 +77,14 @@ func UnequipHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "Wrong format")
 		return
 	}
-	if(SlotID >= len(users[m.Author.ID].Equipment)) {
+	if(SlotID >= len(players[m.Author.ID].Equipment)) {
 		s.ChannelMessageSend(m.ChannelID, "You don't have that many slots bro")
 		return
 	}
 	
-	temp := users[m.Author.ID].Equipment[SlotID]
+	temp := players[m.Author.ID].Equipment[SlotID]
 	if Unequip(m.Author, SlotID) {
-		users[m.Author.ID].Inventory = append(users[m.Author.ID].Inventory, temp)
+		players[m.Author.ID].Inventory = append(players[m.Author.ID].Inventory, temp)
 
 		s.ChannelMessageSend(m.ChannelID, "Unequipped " + items[temp].Name)
 	} else {
@@ -94,17 +94,17 @@ func UnequipHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func Equip(user *discordgo.User, itemID int) bool {
-	if(users[user.ID].Equipment[items[itemID].SlotID] == -1) {
-		users[user.ID].Equipment[items[itemID].SlotID] = itemID
+	if(players[user.ID].Equipment[items[itemID].SlotID] == -1) {
+		players[user.ID].Equipment[items[itemID].SlotID] = itemID
 		temp := items[itemID]
 
-		users[user.ID].Hp += temp.Hp
-		users[user.ID].Atk += temp.Atk
-		users[user.ID].Def += temp.Def
-		users[user.ID].Evasion += temp.Evasion
-		users[user.ID].CritChance += temp.CritChance
+		players[user.ID].Hp += temp.Hp
+		players[user.ID].Atk += temp.Atk
+		players[user.ID].Def += temp.Def
+		players[user.ID].Evasion += temp.Evasion
+		players[user.ID].CritChance += temp.CritChance
 
-		fmt.Println("Equipped " + temp.Name + " for " + users[user.ID].Name)
+		fmt.Println("Equipped " + temp.Name + " for " + players[user.ID].Name)
 		return true
 	} else {
 		return false
@@ -112,18 +112,18 @@ func Equip(user *discordgo.User, itemID int) bool {
 }
 
 func Unequip(user *discordgo.User, SlotID int) bool {
-	if(users[user.ID].Equipment[SlotID] != -1) {
-		temp := items[users[user.ID].Equipment[SlotID]]
+	if(players[user.ID].Equipment[SlotID] != -1) {
+		temp := items[players[user.ID].Equipment[SlotID]]
 
-		users[user.ID].Hp -= temp.Hp
-		users[user.ID].Atk -= temp.Atk
-		users[user.ID].Def -= temp.Def
-		users[user.ID].Evasion -= temp.Evasion
-		users[user.ID].CritChance -= temp.CritChance
+		players[user.ID].Hp -= temp.Hp
+		players[user.ID].Atk -= temp.Atk
+		players[user.ID].Def -= temp.Def
+		players[user.ID].Evasion -= temp.Evasion
+		players[user.ID].CritChance -= temp.CritChance
 
-		users[user.ID].Equipment[SlotID] = -1
+		players[user.ID].Equipment[SlotID] = -1
 
-		fmt.Println("Unequipped " + temp.Name + " for " + users[user.ID].Name)
+		fmt.Println("Unequipped " + temp.Name + " for " + players[user.ID].Name)
 		return true
 	} else {
 		return false

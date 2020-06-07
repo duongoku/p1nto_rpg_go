@@ -24,29 +24,29 @@ func DamageCalc(hp *int, atk int, def int, crt int, eva int) (bool, bool, int) {
 	return a, b, atk
 }
 
-func Hit(s *discordgo.Session, m **discordgo.Message, chanID *string, u1 *discordgo.User, u2 *discordgo.User, hp1 *int, hp2 *int) bool {
+func Hit(s *discordgo.Session, m **discordgo.Message, chanID *string, p1 *player, p2 *player, hp1 *int, hp2 *int) bool {
 	*m, _ = s.ChannelMessage(*chanID, (*m).ID)
-	a, b, c := DamageCalc(hp2, users[u1.ID].Atk, users[u2.ID].Def, users[u1.ID].CritChance, users[u1.ID].Evasion)
+	a, b, c := DamageCalc(hp2, p1.Atk, p2.Def, p1.CritChance, p2.Evasion)
 	tmps := ((*m).Content + "\n")
 	if a {
-		tmps = tmps + u1.Username + " missed!"
+		tmps += p1.Name + " missed!"
 		s.ChannelMessageEdit(*chanID, (*m).ID, tmps)
 	} else if b {
-		tmps = tmps + u1.Username + " landed a critical hit on " + u2.Username + " for "
-		tmps = tmps + strconv.Itoa(c) + " damage!"
+		tmps += p1.Name + " landed a critical hit on " + p2.Name + " for "
+		tmps += strconv.Itoa(c) + " damage!"
 		s.ChannelMessageEdit(*chanID, (*m).ID, tmps)
 	} else {
-		tmps = tmps + u1.Username + " hit " + u2.Username + " for "
-		tmps = tmps + strconv.Itoa(c) + " damage!"
+		tmps += p1.Name + " hit " + p2.Name + " for "
+		tmps += strconv.Itoa(c) + " damage!"
 		s.ChannelMessageEdit(*chanID, (*m).ID, tmps)
 	}
 	if *hp2 <= 0 {
 		*m, _ = s.ChannelMessage(*chanID, (*m).ID)
 		tmps = (*m).Content + "\n"
-		tmps = tmps + u2.Username + "'s HP reached 0, " + u2.Username + " is dead.\n"
-		tmps = tmps + u1.Username + " Won! $10 has been added to " + u1.Username + "'s balance"
+		tmps += p2.Name + "'s HP reached 0, " + p2.Name + " is dead.\n"
+		tmps += p1.Name + " Won! $10 has been added to " + p1.Name + "'s balance"
 		s.ChannelMessageEdit(*chanID, (*m).ID, tmps)
-		users[u1.ID].Money += 10
+		p1.Money += 10
 		return true
 	}
 	return false
@@ -82,19 +82,22 @@ func CombatHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	CheckPlayer(u1)
 	CheckPlayer(u2)
 
-	hp1 := users[u1.ID].Hp
-	hp2 := users[u1.ID].Hp
+	p1 := players[u1.ID]
+	p2 := players[u2.ID]
+
+	hp1 := p1.Hp
+	hp2 := p2.Hp
 
 	//u1 goes first since u1 declares the battle
 
-	tmpmm, _ := s.ChannelMessageSend(m.ChannelID, u1.Username + " vs " + u2.Username)
+	tmpmm, _ := s.ChannelMessageSend(m.ChannelID, p1.Name + " vs " + p2.Name)
 	tmpm := &tmpmm
 
 	for {
-		if Hit(s, tmpm, &(m.ChannelID), u1, u2, &hp1, &hp2) {
+		if Hit(s, tmpm, &(m.ChannelID), p1, p2, &hp1, &hp2) {
 			break
 		}
-		if Hit(s, tmpm, &(m.ChannelID), u2, u1, &hp2, &hp1) {
+		if Hit(s, tmpm, &(m.ChannelID), p2, p1, &hp2, &hp1) {
 			break
 		}
 		// time.Sleep(500 * time.Millisecond)

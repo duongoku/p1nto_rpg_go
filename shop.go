@@ -58,11 +58,11 @@ func BuyHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if itemID >= len(items) || itemID < 0 {
 		s.ChannelMessageSend(m.ChannelID, "There is no such item!")
-	} else if items[itemID].Price > users[u.ID].Money {
+	} else if items[itemID].Price > players[u.ID].Money {
 		s.ChannelMessageSend(m.ChannelID, "Not enough money you poor litte shit :smirk: !")
 	} else {
-		users[u.ID].Inventory = append(users[u.ID].Inventory, itemID)
-		users[u.ID].Money -= items[itemID].Price
+		players[u.ID].Inventory = append(players[u.ID].Inventory, itemID)
+		players[u.ID].Money -= items[itemID].Price
 		s.ChannelMessageSend(m.ChannelID, items[itemID].Name + " has been added to your Inventory !")
 	}
 }
@@ -88,16 +88,16 @@ func SellHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	u := m.Author
 	CheckPlayer(u)
 
-	if invID >= len(users[u.ID].Inventory) || invID < 0 {
+	if invID >= len(players[u.ID].Inventory) || invID < 0 {
 		s.ChannelMessageSend(m.ChannelID, "There is no such item!")
 	} else {
-		users[u.ID].Money += items[users[u.ID].Inventory[invID]].Price
+		players[u.ID].Money += items[players[u.ID].Inventory[invID]].Price
 
-		temp := items[users[u.ID].Inventory[invID]].Name + "is sold!\n"
-		temp += "You get " + strconv.Itoa(items[users[u.ID].Inventory[invID]].Price) + "$ back"
+		temp := items[players[u.ID].Inventory[invID]].Name + "is sold!\n"
+		temp += "You get " + strconv.Itoa(items[players[u.ID].Inventory[invID]].Price) + "$ back"
 
 		s.ChannelMessageSend(m.ChannelID, temp)
-		users[u.ID].Inventory = append(users[u.ID].Inventory[:invID], users[u.ID].Inventory[invID+1:]...)
+		players[u.ID].Inventory = append(players[u.ID].Inventory[:invID], players[u.ID].Inventory[invID+1:]...)
 	}
 
 }

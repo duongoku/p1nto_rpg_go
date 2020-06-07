@@ -11,8 +11,8 @@ func SaveData() {
 
 	tmp := make(map[string]player)
 
-	for i := range users {
-		tmp[i] = *users[i]
+	for i := range players {
+		tmp[i] = *players[i]
 	}
 
 	dataFile, err := os.OpenFile("players.gob", os.O_RDWR, 0644)
@@ -55,6 +55,6 @@ func LoadData() {
 
 	for i := range tmp {
 		v := tmp[i]
-		users[i] = &v
+		players[i] = &v
 	}
 }
