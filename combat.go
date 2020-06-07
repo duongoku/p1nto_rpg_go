@@ -9,7 +9,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func DamageCalc(hp *int, atk int, def int, crt int, eva int) (bool, bool, int){
+func DamageCalc(hp *int, atk int, def int, crt int, eva int) (bool, bool, int) {
 	a, b := false, false
 	if RNG(eva) {
 		atk = 0
@@ -29,7 +29,7 @@ func Hit(s *discordgo.Session, m **discordgo.Message, chanID *string, u1 *discor
 	a, b, c := DamageCalc(hp2, users[u1.ID].Atk, users[u2.ID].Def, users[u1.ID].CritChance, users[u1.ID].Evasion)
 	tmps := ((*m).Content + "\n")
 	if a {
-		tmps = tmps + u1.Username + " missed! "
+		tmps = tmps + u1.Username + " missed!"
 		s.ChannelMessageEdit(*chanID, (*m).ID, tmps)
 	} else if b {
 		tmps = tmps + u1.Username + " landed a critical hit on " + u2.Username + " for "
