@@ -56,6 +56,7 @@ func EquipmentHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "You mentioned more than one person")
 		return
 	}
+
 	u := m.Author
 	if len(m.Mentions)==1 {
 		u = m.Mentions[0]
@@ -104,6 +105,7 @@ func InventoryHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "You mentioned more than one person")
 		return
 	}
+	
 	u := m.Author
 	if len(m.Mentions)==1 {
 		u = m.Mentions[0]
