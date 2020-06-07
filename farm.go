@@ -150,6 +150,6 @@ func FarmHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	//fmt.Println("debug")
-
+	CheckPlayer(m.Author)
 	CombatNPC(s, m, players[m.Author.ID], NPCs[dun.Monsters[cnt]])
 }

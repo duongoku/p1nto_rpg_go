@@ -113,7 +113,7 @@ func Loop(s *discordgo.Session, stopListening func()) {
 	InitNPC()
 	InitDungeon()
 	LoadData()
-	// defer SaveData()
+	defer SaveData()
 	for {
 		select {
 			case m := <-mess:
