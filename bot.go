@@ -5,6 +5,8 @@ import (
 	"strings"
 	"math/rand"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -81,6 +83,12 @@ func MessageHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 		case "stats":
 			StatsHandle(s, m)
 			break
+		case "dungeon":
+			DungeonHandle(s, m)
+			break
+		case "npc":
+			NPCHandle(s, m)
+			break
 		case "equipment":
 			EquipmentHandle(s, m)
 			break
@@ -108,18 +116,24 @@ func MessageHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	fmt.Println(m.Author.ID + ": " + content)
 }
 
-func Loop(s *discordgo.Session, stopListening func()) {
+func Loop(s *discordgo.Session) {
 	InitItem()
 	InitNPC()
 	InitDungeon()
 	LoadData()
 	defer SaveData()
+
+	sc := make(chan os.Signal, 1)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	
 	for {
 		select {
 			case m := <-mess:
 				MessageHandle(s, m)
+			case <-sc:
+				fmt.Println("Terminated!")
+				return
 			case <-terminate:
-				stopListening()
 				fmt.Println("Terminated!")
 				return
 		}

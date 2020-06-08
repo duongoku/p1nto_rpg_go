@@ -8,6 +8,7 @@ import (
 
 func SaveData() {
 	fmt.Println("Saving data . . .")
+	defer fmt.Println("Saved")
 
 	tmp := make(map[string]player)
 
@@ -34,6 +35,7 @@ func SaveData() {
 
 func LoadData() {
 	fmt.Println("Loading data . . .")
+	defer fmt.Println("Loaded")
 
 	tmp := make(map[string]player)
 

@@ -3,8 +3,6 @@ package p1nto
 import (
 	"strings"
 	"strconv"
-	// "time"
-	// "fmt"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -29,22 +27,22 @@ func Hit(s *discordgo.Session, m **discordgo.Message, chanID *string, p1 *player
 	a, b, c := DamageCalc(hp2, p1.Atk, p2.Def, p1.CritChance, p2.Evasion)
 	tmps := ((*m).Content + "\n")
 	if a {
-		tmps += p1.Name + " missed!"
+		tmps += "**" + p1.Name + "** missed!"
 		s.ChannelMessageEdit(*chanID, (*m).ID, tmps)
 	} else if b {
-		tmps += p1.Name + " landed a critical hit on " + p2.Name + " for "
+		tmps += "**" + p1.Name + "** landed a critical hit on **" + p2.Name + "** for "
 		tmps += strconv.Itoa(c) + " damage!"
 		s.ChannelMessageEdit(*chanID, (*m).ID, tmps)
 	} else {
-		tmps += p1.Name + " hit " + p2.Name + " for "
+		tmps += "**" + p1.Name + "** hit **" + p2.Name + "** for "
 		tmps += strconv.Itoa(c) + " damage!"
 		s.ChannelMessageEdit(*chanID, (*m).ID, tmps)
 	}
 	if *hp2 <= 0 {
 		*m, _ = s.ChannelMessage(*chanID, (*m).ID)
 		tmps = (*m).Content + "\n"
-		tmps += p2.Name + "'s HP reached 0, " + p2.Name + " is dead.\n"
-		tmps += p1.Name + " Won! $10 has been added to " + p1.Name + "'s balance"
+		tmps += "**" + p2.Name + "**'s HP reached 0, **" + p2.Name + "** is dead.\n"
+		tmps += "**" + p1.Name + "** Won! $10 has been added to **" + p1.Name + "**'s balance"
 		s.ChannelMessageEdit(*chanID, (*m).ID, tmps)
 		p1.Money += 10
 		return true
@@ -79,6 +77,11 @@ func CombatHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	u1 := m.Author
 	u2 := m.Mentions[0]
 
+	if u2.Bot {
+		s.ChannelMessageSend(m.ChannelID, "You can't fight a bot bro")
+		return
+	}
+
 	CheckPlayer(u1)
 	CheckPlayer(u2)
 
@@ -90,7 +93,7 @@ func CombatHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	//u1 goes first since u1 declares the battle
 
-	tmpmm, _ := s.ChannelMessageSend(m.ChannelID, p1.Name + " vs " + p2.Name)
+	tmpmm, _ := s.ChannelMessageSend(m.ChannelID, "**" + p1.Name + "** :crossed_swords: **" + p2.Name + "**")
 	tmpm := &tmpmm
 
 	for {
