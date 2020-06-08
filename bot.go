@@ -5,6 +5,8 @@ import (
 	"strings"
 	"math/rand"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -13,31 +15,37 @@ var (
 	mess = make(chan *discordgo.MessageCreate, 1)
 	prefix = "p."
 	terminate = make(chan bool, 1)
-	users = make(map[string]*player)
 	items = make(map[int]*item)
+	players = make(map[string]*player)
+	NPCs = make(map[int]*NPC)
+	dungeons = make(map[int]*dungeon)
 )
 
 func Min(x, y int) int {
 	if x < y {
-	return x
+		return x
 	}
 	return y
 }
 
 func Max(x, y int) int {
 	if x > y {
-	return x
+		return x
 	}
 	return y
 }
 
 func RNG(x int) bool {
-	//x% is the miss chance
+	//x% is the miss/crit chance
 	if rand.Intn(100) < x {
 		return true
 	} else {
 		return false
 	}
+}
+
+func xRNG() int {
+	return rand.Intn(100)
 }
 
 func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -66,11 +74,20 @@ func MessageHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 		case "combat":
 			CombatHandle(s, m)
 			break
+		case "farm":
+			FarmHandle(s, m)
+			break
 		case "help":
 			HelpHandle(s, m)
 			break
 		case "stats":
 			StatsHandle(s, m)
+			break
+		case "dungeon":
+			DungeonHandle(s, m)
+			break
+		case "npc":
+			NPCHandle(s, m)
 			break
 		case "equipment":
 			EquipmentHandle(s, m)
@@ -99,16 +116,24 @@ func MessageHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	fmt.Println(m.Author.ID + ": " + content)
 }
 
-func Loop(s *discordgo.Session, stopListening func()) {
+func Loop(s *discordgo.Session) {
 	InitItem()
+	InitNPC()
+	InitDungeon()
 	LoadData()
 	defer SaveData()
+
+	sc := make(chan os.Signal, 1)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	
 	for {
 		select {
 			case m := <-mess:
 				MessageHandle(s, m)
+			case <-sc:
+				fmt.Println("Terminated!")
+				return
 			case <-terminate:
-				stopListening()
 				fmt.Println("Terminated!")
 				return
 		}
