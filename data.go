@@ -8,11 +8,12 @@ import (
 
 func SaveData() {
 	fmt.Println("Saving data . . .")
+	defer fmt.Println("Saved")
 
 	tmp := make(map[string]player)
 
-	for i := range users {
-		tmp[i] = *users[i]
+	for i := range players {
+		tmp[i] = *players[i]
 	}
 
 	dataFile, err := os.OpenFile("players.gob", os.O_RDWR, 0644)
@@ -34,6 +35,7 @@ func SaveData() {
 
 func LoadData() {
 	fmt.Println("Loading data . . .")
+	defer fmt.Println("Loaded")
 
 	tmp := make(map[string]player)
 
@@ -55,6 +57,6 @@ func LoadData() {
 
 	for i := range tmp {
 		v := tmp[i]
-		users[i] = &v
+		players[i] = &v
 	}
 }
