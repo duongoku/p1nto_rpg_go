@@ -8,9 +8,33 @@ import (
 )
 
 func ShopHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
-	temp := "```Welcome to the shop"
+	content := strings.Split(m.Content, " ")
+	if len(content) < 2 {
+		s.ChannelMessageSend(m.ChannelID, "You must provide a shelf number")
+		return
+	}
+	if len(content) > 2 {
+		s.ChannelMessageSend(m.ChannelID, "Too many arguments")
+		return
+	}
+	shelf, err := strconv.Atoi(content[1])
+	if err != nil {
+		s.ChannelMessageSend(m.ChannelID, "Wrong Format")
+  		fmt.Println(err)
+  		return
+	}
 	total := len(items)
-	for i := 0; i < total; i++ {
+	var (
+		left int = 5*shelf
+		right int = Min(5*shelf + 5, total)
+	)
+	if left >= total {
+		s.ChannelMessageSend(m.ChannelID, "We don't have that much items")
+		return
+	}
+
+	temp := "```Welcome to the shop"
+	for i := left; i < right; i++ {
 		temp = temp + "\n\nItem ID:" + strconv.Itoa(i) + " Price: $" + strconv.Itoa(items[i].Price)
 		temp = temp + "\n" + items[i].Name + " | Equip Slot:" + strconv.Itoa(items[i].SlotID) + " | "
 		if items[i].Hp > 0 {
@@ -58,11 +82,11 @@ func BuyHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if itemID >= len(items) || itemID < 0 {
 		s.ChannelMessageSend(m.ChannelID, "There is no such item!")
-	} else if items[itemID].Price > users[u.ID].Money {
+	} else if items[itemID].Price > players[u.ID].Money {
 		s.ChannelMessageSend(m.ChannelID, "Not enough money you poor litte shit :smirk: !")
 	} else {
-		users[u.ID].Inventory = append(users[u.ID].Inventory, itemID)
-		users[u.ID].Money -= items[itemID].Price
+		players[u.ID].Inventory = append(players[u.ID].Inventory, itemID)
+		players[u.ID].Money -= items[itemID].Price
 		s.ChannelMessageSend(m.ChannelID, items[itemID].Name + " has been added to your Inventory !")
 	}
 }
@@ -88,16 +112,16 @@ func SellHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	u := m.Author
 	CheckPlayer(u)
 
-	if invID >= len(users[u.ID].Inventory) || invID < 0 {
+	if invID >= len(players[u.ID].Inventory) || invID < 0 {
 		s.ChannelMessageSend(m.ChannelID, "There is no such item!")
 	} else {
-		users[u.ID].Money += items[users[u.ID].Inventory[invID]].Price
+		players[u.ID].Money += items[players[u.ID].Inventory[invID]].Price
 
-		temp := items[users[u.ID].Inventory[invID]].Name + "is sold!\n"
-		temp += "You get " + strconv.Itoa(items[users[u.ID].Inventory[invID]].Price) + "$ back"
+		temp := items[players[u.ID].Inventory[invID]].Name + "is sold!\n"
+		temp += "You get " + strconv.Itoa(items[players[u.ID].Inventory[invID]].Price) + "$ back"
 
 		s.ChannelMessageSend(m.ChannelID, temp)
-		users[u.ID].Inventory = append(users[u.ID].Inventory[:invID], users[u.ID].Inventory[invID+1:]...)
+		players[u.ID].Inventory = append(players[u.ID].Inventory[:invID], players[u.ID].Inventory[invID+1:]...)
 	}
 
 }
