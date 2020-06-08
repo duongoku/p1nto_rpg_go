@@ -8,9 +8,33 @@ import (
 )
 
 func ShopHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
-	temp := "```Welcome to the shop"
+	content := strings.Split(m.Content, " ")
+	if len(content) < 2 {
+		s.ChannelMessageSend(m.ChannelID, "You must provide a shelf number")
+		return
+	}
+	if len(content) > 2 {
+		s.ChannelMessageSend(m.ChannelID, "Too many arguments")
+		return
+	}
+	shelf, err := strconv.Atoi(content[1])
+	if err != nil {
+		s.ChannelMessageSend(m.ChannelID, "Wrong Format")
+  		fmt.Println(err)
+  		return
+	}
 	total := len(items)
-	for i := 0; i < total; i++ {
+	var (
+		left int = 5*shelf
+		right int = Min(5*shelf + 5, total)
+	)
+	if left >= total {
+		s.ChannelMessageSend(m.ChannelID, "We don't have that much items")
+		return
+	}
+
+	temp := "```Welcome to the shop"
+	for i := left; i < right; i++ {
 		temp = temp + "\n\nItem ID:" + strconv.Itoa(i) + " Price: $" + strconv.Itoa(items[i].Price)
 		temp = temp + "\n" + items[i].Name + " | Equip Slot:" + strconv.Itoa(items[i].SlotID) + " | "
 		if items[i].Hp > 0 {
