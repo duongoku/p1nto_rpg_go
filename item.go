@@ -58,6 +58,7 @@ func InitItem() {
 	items[27] = &item{"Knight's Vow", 15000, 2, 1000, 100, 200, 0, 10}
 	items[28] = &item{"Black Hole", -1, 3, 50, 50, 50, 35, 1}
 	items[29] = &item{"Challanger's Pride", 12500, 4, 500, 50, 50, 0, 9}
+}
 
 func EquipHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	content := strings.Split(m.Content, " ")
