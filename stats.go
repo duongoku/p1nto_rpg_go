@@ -23,7 +23,7 @@ func StatsHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	CheckPlayer(u)
-	p := users[u.ID]
+	p := players[u.ID]
 
 	/*Name string
 	Money int
@@ -63,7 +63,7 @@ func EquipmentHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	CheckPlayer(u)
-	p := users[u.ID]
+	p := players[u.ID]
 
 	tmps := (p.Name + "'s Equipment:")
 	for id, eqmid := range p.Equipment {
@@ -112,7 +112,7 @@ func InventoryHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	CheckPlayer(u)
-	p := users[u.ID]
+	p := players[u.ID]
 
 	tmps := "```" + p.Name + "'s Inventory:\n"
 	if len(p.Inventory) == 0 {

@@ -18,9 +18,9 @@ type player struct {
 }
 
 func CheckPlayer(user *discordgo.User) {
-	_, ok := users[user.ID]
+	_, ok := players[user.ID]
 	if !ok {
-		users[user.ID] = &player{user.Username, 0, [5]int{-1, -1, -1, -1, -1}, nil, 50, 10, 1, 1, 1}
+		players[user.ID] = &player{user.Username, 0, [5]int{-1, -1, -1, -1, -1}, nil, 50, 10, 1, 1, 1}
 		Equip(user, 1)
 		Equip(user, 2)
 		Equip(user, 3)
