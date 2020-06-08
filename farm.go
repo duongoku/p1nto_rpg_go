@@ -76,7 +76,7 @@ func HitNPC(s *discordgo.Session, m *discordgo.Message, p *player, n *NPC, hpp *
 }
 
 func CombatNPC(s *discordgo.Session, m *discordgo.MessageCreate, p *player, n *NPC) {
-	tmpm, _ := s.ChannelMessageSend(m.ChannelID, "A wild **" + n.Name + "** appeared")
+	tmpm, _ := s.ChannelMessageSend(m.ChannelID, ":warning: A wild **" + n.Name + "** appeared")
 
 	hpp := p.Hp
 	hpn := n.Hp

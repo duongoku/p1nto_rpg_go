@@ -20,6 +20,9 @@ func HelpHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	temp += "- 'shop' to go to shop and see shelves\n"
 	temp += "- 'buy' + {Item ID} to buy an item\n"
 	temp += "- 'sell' + {ID in Inventory} to sell an item\n"
+	temp += "- 'dungeon' + {Dungeon ID} to see a dungeon's monsters\n"
+	temp += "- 'npc' + {NPC ID} to see a monster/NPC details\n"
+	temp += "- 'farm' + {Dungeon ID} to farm a dungeon\n"
 	temp += "```"
 	s.ChannelMessageSend(m.ChannelID, temp)
 }
