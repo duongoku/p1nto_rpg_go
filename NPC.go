@@ -19,9 +19,10 @@ type NPC struct {
 	CritChance int
 }
 
-var NPCEmoji = []string{"<:raptor:719483403208228934> ", "<:murkwolf:719483393322254407>", "<:krug:719483382790226012>", "<:gromp:719483369737551902>"}
-
 func InitNPC() {
+	//Credited to github.com/Darthveloper21
+
+	//Name, Loot[], Bounty, Hp, Atk, Def,  Evasion, CritChance
 	NPCs[0] = &NPC{"Raptor", []int{0}, 2, 50, 10, 1, 1, 1}
 	NPCs[1] = &NPC{"Murk Wolf", []int{0}, 5, 75, 15, 5, 1, 10}
 	NPCs[2] = &NPC{"Krug", []int{0}, 10, 100, 20, 10, 5, 50}
@@ -59,11 +60,7 @@ func NPCHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	tmp := "**" + NPCs[NPCID].Name + "** "
-	if NPCID < 4 {
-		tmp += NPCEmoji[NPCID]
-	}
-
+	tmp := "**" + NPCs[NPCID].Name + "**"
 	tmp +=  "\n Loot: "
 	tmp +=  "\n Bounty: $" + strconv.Itoa(NPCs[NPCID].Bounty)
 	tmp +=  "\n Health Points: " + strconv.Itoa(NPCs[NPCID].Hp) + " "

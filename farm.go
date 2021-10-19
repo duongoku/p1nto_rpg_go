@@ -17,7 +17,7 @@ func InitDungeon() {
 	dungeons[0] = &dungeon{[]int{0, 1, 2, 3}, []int{50, 30, 15, 5}}
 	dungeons[1] = &dungeon{[]int{4, 5, 6}, []int{60, 35, 5}}
 	dungeons[2] = &dungeon{[]int{7, 8, 9, 10}, []int{40, 30, 20, 10}}
-	dungeons[3] = &dungeon{[]int{11, 12, 13}, []int{60, 30, 10}}
+	dungeons[3] = &dungeon{[]int{11, 12, 13}, []int{50, 30, 20}}
 	dungeons[4] = &dungeon{[]int{14}, []int{100}}
 }
 
@@ -76,7 +76,7 @@ func HitNPC(s *discordgo.Session, m *discordgo.Message, p *player, n *NPC, hpp *
 }
 
 func CombatNPC(s *discordgo.Session, m *discordgo.MessageCreate, p *player, n *NPC) {
-	tmpm, _ := s.ChannelMessageSend(m.ChannelID, "A wild **" + n.Name + "** appeared")
+	tmpm, _ := s.ChannelMessageSend(m.ChannelID, ":warning: A wild **" + n.Name + "** appeared")
 
 	hpp := p.Hp
 	hpn := n.Hp

@@ -26,6 +26,8 @@ func main() {
 
 	err = dg.Open()
 	defer dg.Close()
+
+	dg.UpdateStatus(0, "p.help")
 	
 	if err != nil {
 		fmt.Println("Error opening Discord session: ", err)
@@ -34,7 +36,6 @@ func main() {
 
 	fmt.Println("Bot is online!")
 
-	stopListening := dg.AddHandler(p1nto.MessageCreate)
-
-	p1nto.Loop(dg, stopListening)
+	dg.AddHandler(p1nto.MessageCreate)
+	p1nto.Loop(dg)
 }

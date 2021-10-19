@@ -20,6 +20,8 @@ type item struct {
 }
 
 func InitItem() {
+	//Credited to github.com/Darthveloper21
+
 	//Name, Price, SlotID, Hp, Atk, Def, Evasion, CritChane
 	items[0] = &item{"Wooden Amulet", 60, 0, 5, 5, 5, 1, 5}
 	items[1] = &item{"Wooden Stick", 60, 1, 0, 30, 0, 0, 7}
@@ -127,14 +129,10 @@ func UnequipHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func Equip(user *discordgo.User, itemID int) bool {
 	if(players[user.ID].Equipment[items[itemID].SlotID] == -1) {
-		players[user.ID].Equipment[items[itemID].SlotID] = itemID
 		temp := items[itemID]
+		players[user.ID].Equipment[items[itemID].SlotID] = itemID
 
-		players[user.ID].Hp += temp.Hp
-		players[user.ID].Atk += temp.Atk
-		players[user.ID].Def += temp.Def
-		players[user.ID].Evasion += temp.Evasion
-		players[user.ID].CritChance += temp.CritChance
+    RecalcStats(players[user.ID])
 
 		fmt.Println("Equipped " + temp.Name + " for " + players[user.ID].Name)
 		return true
@@ -146,18 +144,36 @@ func Equip(user *discordgo.User, itemID int) bool {
 func Unequip(user *discordgo.User, SlotID int) bool {
 	if(players[user.ID].Equipment[SlotID] != -1) {
 		temp := items[players[user.ID].Equipment[SlotID]]
-
-		players[user.ID].Hp -= temp.Hp
-		players[user.ID].Atk -= temp.Atk
-		players[user.ID].Def -= temp.Def
-		players[user.ID].Evasion -= temp.Evasion
-		players[user.ID].CritChance -= temp.CritChance
-
-		players[user.ID].Equipment[SlotID] = -1
+    
+    players[user.ID].Equipment[SlotID] = -1
+		RecalcStats(players[user.ID])
 
 		fmt.Println("Unequipped " + temp.Name + " for " + players[user.ID].Name)
 		return true
 	} else {
 		return false
 	}
+}
+
+func RecalcStats(p *player) {
+	//Basic stats are 50, 10, 1, 0, 0
+	p.Hp = 50
+	p.Atk = 10
+	p.Def = 1
+	p.Evasion = 0
+	p.CritChance = 0
+
+	for _, itemID := range p.Equipment {
+		if itemID == -1 {
+			continue
+		}
+		p.Hp += items[itemID].Hp
+		p.Atk += items[itemID].Atk
+		p.Def += items[itemID].Def
+		p.Evasion += items[itemID].Evasion
+		p.CritChance += items[itemID].CritChance
+	}
+
+	p.Evasion = Min(p.Evasion, 40)
+	p.CritChance = Min(p.CritChance, 100)
 }

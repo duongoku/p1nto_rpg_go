@@ -37,6 +37,9 @@ func Max(x, y int) int {
 
 func RNG(x int) bool {
 	//x% is the miss/crit chance
+	if x <= 0 {
+		return false
+	}
 	if rand.Intn(100) < x {
 		return true
 	} else {
