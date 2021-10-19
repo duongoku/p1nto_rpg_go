@@ -60,6 +60,7 @@ func InitItem() {
 	items[29] = &item{"Challanger's Pride", 12500, 4, 500, 50, 50, 0, 9}
 }
 
+
 func EquipHandle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	content := strings.Split(m.Content, " ")
 	if len(content)>2 {
@@ -131,7 +132,7 @@ func Equip(user *discordgo.User, itemID int) bool {
 		temp := items[itemID]
 		players[user.ID].Equipment[items[itemID].SlotID] = itemID
 
-		RecalcStats(players[user.ID])
+    RecalcStats(players[user.ID])
 
 		fmt.Println("Equipped " + temp.Name + " for " + players[user.ID].Name)
 		return true
@@ -143,8 +144,8 @@ func Equip(user *discordgo.User, itemID int) bool {
 func Unequip(user *discordgo.User, SlotID int) bool {
 	if(players[user.ID].Equipment[SlotID] != -1) {
 		temp := items[players[user.ID].Equipment[SlotID]]
-		players[user.ID].Equipment[SlotID] = -1
-
+    
+    players[user.ID].Equipment[SlotID] = -1
 		RecalcStats(players[user.ID])
 
 		fmt.Println("Unequipped " + temp.Name + " for " + players[user.ID].Name)
